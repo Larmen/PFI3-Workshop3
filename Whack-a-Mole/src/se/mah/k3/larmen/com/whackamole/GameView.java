@@ -14,8 +14,11 @@ public class GameView extends View{
 	public boolean showing;
 	private Mole mole;
 	private int scoreBoard;
+	private int scoreGoal = 15;
 	private Main parent;
 	private Paint textPaint;
+	private boolean playing;
+	
 	
 	
 	
@@ -25,6 +28,7 @@ public class GameView extends View{
 		parent = (Main) context;
 		textPaint = new Paint();
 		textPaint.setColor(Color.CYAN);
+		playing = true;
 		// TODO Auto-generated constructor stub
 		
 	}
@@ -35,8 +39,9 @@ public class GameView extends View{
 		super.onDraw(canvas);
 		
 		//Game is alive!
-		if(scoreBoard < 5){
-			canvas.drawText(Integer.toString(scoreBoard) + " / 15", 10, 10, textPaint);
+		if(scoreBoard < scoreGoal){
+			playing = true;
+			canvas.drawText(Integer.toString(scoreBoard) + " / " + Integer.toString(scoreGoal), 10, 10, textPaint);
 				if(!showing){
 				canvas.drawCircle(mole.getPosX(), mole.getPosY(), mole.getRadius()*2, mole.getPaint());
 		//Log.i("whack", "OnDRAW!");
@@ -44,7 +49,10 @@ public class GameView extends View{
 				} 
 		}else{
 			
-			canvas.drawText("You killed 15 innocent child moles. How could you?", 100, 400, textPaint);
+			canvas.drawText(Integer.toString(scoreBoard) + " / " + Integer.toString(scoreGoal), 10, 10, textPaint);
+			canvas.drawText("You killed "+ Integer.toString(scoreGoal)+ " innocent child moles. How could you?", 100, 400, textPaint);
+			canvas.drawText("(Tap to restart)", 200, 500, textPaint);
+			playing = false;
 		}
 	}
 
@@ -69,6 +77,7 @@ public class GameView extends View{
 	public boolean onTouchEvent(MotionEvent event) {
 		// TODO Auto-generated method stub
 		
+		if(playing){
 		if((event.getX() < (mole.getPosX()+mole.getRadius())) && 
 				(event.getX() > (mole.getPosX()- mole.getRadius()) )
 				&& event.getY() < (mole.getPosY()+mole.getRadius())
@@ -85,8 +94,14 @@ public class GameView extends View{
 			Log.i("whack", "you clicked outside dumbass" + " " + scoreBoard);
 			parent.clickOutsideMole();
 		}
-		
-		
+	
+		}else if(!playing){
+			
+			setScoreBoardZero();
+			parent.sleepDurationReset();
+			playing = true;
+			
+		}
 		
 		return super.onTouchEvent(event);
 	}

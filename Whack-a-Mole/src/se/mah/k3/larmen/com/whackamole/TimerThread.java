@@ -42,4 +42,9 @@ public class TimerThread extends Thread {
 		// TODO Auto-generated method stub
 		sleepDuration = sleepDuration + 40;
 	}
+
+	public void sleepDurationReset() {
+		// TODO Auto-generated method stub
+		sleepDuration = 1000;
+	}
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.Message;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +20,8 @@ public class Main extends Activity implements OnClickListener, Callback {
 	private TimerThread t;
 	private GameView gameView;
 	private Handler handler;
+	private Vibrator vibrator;
+	private final long vibrationTime = 50;
 	
 	
 	
@@ -35,14 +38,10 @@ public class Main extends Activity implements OnClickListener, Callback {
         
         gameView = new GameView(this);
         setContentView(gameView);
-        
         handler = new Handler(this);
-        /*
-        Button startButton = (Button) findViewById(R.id.button1);
-        startButton.setOnClickListener(this);
-        */
-        //gameView.setOnClickListener(this);
-        //gameView.setOnTouchListener(this);
+        
+        vibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);
+        
         t = new TimerThread(handler);
         t.start();
         gameView.setScoreBoardZero();
@@ -87,6 +86,13 @@ public class Main extends Activity implements OnClickListener, Callback {
 		// TODO Auto-generated method stub
 		t.setSleepPlus();
 		Log.i("whack", "Main: clickOutsideMole");
+		vibrator.vibrate(vibrationTime);
+		
+	}
+
+	public void sleepDurationReset() {
+		// TODO Auto-generated method stub
+		t.sleepDurationReset();
 	}
 
 	
